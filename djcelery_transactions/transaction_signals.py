@@ -57,6 +57,8 @@ def commit(old_function, *args, **kwargs):
     # decorators catch this and call rollback(), but the middleware doesn't.
     old_function(*args, **kwargs)
     transaction.signals.post_commit.send(None)
+    #we shouldn't need to do this, but sqlite won't work without it
+    transaction.set_clean(*args, **kwargs)
 
 
 def commit_unless_managed(old_function, *args, **kwargs):
